@@ -5,15 +5,48 @@
 </header>
 <body>
 <form onsubmit="return false">
-  <h3>Number of items/players: (works properly with 2, 4, or 8)</h3><br>
+  <h3>Number of players: (currently works with 2, 4, or 8)</h3><br>
   <input type="text" name="numItems" id="numItems">
-  <input type="Submit" value="submit" onclick="brackIt(getElementById('numItems').value)">
+  <input type="Submit" value="submit" onclick="nameForm(getElementById('numItems').value)">
+</form>
+
+<form id="playerForm" onsubmit="return false" style="display:none">
+  <h3>Names of players:</h3>
+  <input type="Submit" value="submit" onclick="getNames(getElementById('numItems').value)">
 </form>
 
 <div id='bracketSpace'></div>
 
 <script>
-function brackIt(numItems){
+function nameForm(numItems){
+  //Get form element
+  var formElement = document.getElementById('playerForm');
+  for(var i=0; i<numItems; i++){//Create a text entry element for each player
+    var textElement = document.createElement('input');
+    textElement.type = 'text';
+    textElement.id = 'player'+i;
+    formElement.appendChild(textElement);
+  }
+  /*//Add submit button
+  var submitButton = document.createElement('input');
+  submitButton.type = 'Submit';
+  submitButton.value = 'submit';
+  submitButton.onclick = 'getNames('+numItems+')';
+  formElement.appendChild(submitButton);*/
+  //Make form visible
+  formElement.style.display = 'block';
+}
+
+function getNames(numItems){
+  var names = [];
+  for(var i=0; i<numItems; i++){//Put all names in names[]
+    var textElement = document.getElementById('player'+i);
+    names.push(textElement.value);
+  }
+  brackIt(numItems, names);
+}
+
+function brackIt(numItems, names){
   numItems = parseInt(numItems);
   console.log('numItems: '+numItems);
   //complain if numItems is not a number
@@ -49,7 +82,7 @@ function brackIt(numItems){
   console.log(bracket._root);
 
   //Call functions for creating the bracket and printing it
-  createBracket(bracket._root, numRounds, numbers, 1);
+  createBracket(bracket._root, numRounds, names, 1);
   drawBracket(bracket._root);
 }
 
