@@ -1,0 +1,90 @@
+<html>
+<meta charset="utf-8"/>
+<body>
+
+<div id='container'></div>
+
+<script>
+
+var svgNS = 'http://www.w3.org/2000/svg';
+
+var text1x = 20;
+var text1y = 30;
+
+var text2x = 20;
+var text2y = 250;
+
+var text3x = 150;
+var text3y = 150;
+
+var svg = document.createElementNS(svgNS, "svg");
+svg.setAttribute("width", "1000");
+svg.setAttribute("height", "1000");
+
+var text1Element = document.createElementNS(svgNS, 'text');
+text1Element.setAttribute("x", text1x);
+text1Element.setAttribute("y", text1y);
+svg.appendChild(text1Element);
+text1Element.innerHTML = "1";
+
+var text2Element = document.createElementNS(svgNS, 'text');
+text2Element.setAttribute("x", text2x);
+text2Element.setAttribute("y", text2y);
+svg.appendChild(text2Element);
+text2Element.innerHTML = "2";
+
+var text3Element = document.createElementNS(svgNS, 'text');
+text3Element.setAttribute("x", text3x);
+text3Element.setAttribute("y", text3y);
+svg.appendChild(text3Element);
+text3Element.innerHTML = "3";
+
+//Horizontal line from text 1
+var line1 = document.createElementNS(svgNS, 'line');
+line1.setAttribute("x1", text1x+10);
+line1.setAttribute("y1", text1y-5);
+line1.setAttribute("x2", text3x-25);
+line1.setAttribute("y2", text1y-5);
+line1.setAttribute("style", "stroke:rgb(0,0,0);stroke-width:2");
+svg.appendChild(line1);
+
+//Vertical line from line 1 to line 3/5
+var line2 = document.createElementNS(svgNS, 'line');
+line2.setAttribute("x1", line1.getAttribute("x2"));
+line2.setAttribute("y1", line1.getAttribute("y2"));
+line2.setAttribute("x2", text3x-25);
+line2.setAttribute("y2", text3y-5);
+line2.setAttribute("style", "stroke:rgb(0,0,0);stroke-width:2");
+svg.appendChild(line2);
+
+//Horizontal line from line 2/5 to text 3
+var line3 = document.createElementNS(svgNS, 'line');
+line3.setAttribute("x1", line2.getAttribute("x2"));
+line3.setAttribute("y1", line2.getAttribute("y2"));
+line3.setAttribute("x2", text3x-5);
+line3.setAttribute("y2", text3y-5);
+line3.setAttribute("style", "stroke:rgb(0,0,0);stroke-width:2");
+svg.appendChild(line3);
+
+//Horizontal line from text 2 to line 5
+var line4 = document.createElementNS(svgNS, 'line');
+line4.setAttribute("x1", text2x+10);
+line4.setAttribute("y1", text2y-5);
+line4.setAttribute("x2", text3x-25);
+line4.setAttribute("y2", text2y-5);
+line4.setAttribute("style", "stroke:rgb(0,0,0);stroke-width:2");
+svg.appendChild(line4);
+
+//Vertical line from line 4 to line 2/3
+var line5 = document.createElementNS(svgNS, 'line');
+line5.setAttribute("x1", line4.getAttribute("x2"));
+line5.setAttribute("y1", line4.getAttribute("y2"));
+line5.setAttribute("x2", line2.getAttribute("x2"));
+line5.setAttribute("y2", line2.getAttribute("y2"));
+line5.setAttribute("style", "stroke:rgb(0,0,0);stroke-width:2");
+svg.appendChild(line5);
+
+document.getElementById("container").appendChild(svg);
+</script>
+</body>
+</html>
