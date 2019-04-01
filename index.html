@@ -54,7 +54,7 @@ function brackIt(numItems, names){
     console.log('that\'s not an integer');
   }
 
-  /*The plan:
+  /*
   - Calculate number of rounds based on numItems
     - NumItems is number of leaves (number of leaves = number of nodes at max depth)
     - nodes at given depth = 2^depth
@@ -154,7 +154,7 @@ svg.setAttribute("height", "1000");
 function drawBracket(root){
 
   //Start the drawing process
-  drawNode(root, 0, 500, 300);//TODO Make this dynamic based on number of layer
+  drawNode(root, 0, 500, 300);//TODO Make this dynamic based on number of layers
 
   //Put everything in the container
   document.getElementById("bracketSpace").appendChild(svg);
@@ -176,15 +176,15 @@ function drawNode(cNode, layer, x, y){
 
   //Call recursively
   layer++;
-  drawNode(cNode.child1, layer, x-100, y+(100/layer));
-  drawNode(cNode.child2, layer, x-100, y-(100/layer));
+  drawNode(cNode.child1, layer, x-100, y+(95/layer));
+  drawNode(cNode.child2, layer, x-100, y-(105/layer));
 }
 
 /*Drawing scheme:
 root starts at (500, 300)
 every layer moves:
   left 100 (x-100)
-  up or down by 100/layer
+  up or down by 100/layer (shifted so text is above lines)
 */
 
 function drawLines(layer, x, y){
@@ -195,9 +195,9 @@ function drawLines(layer, x, y){
   //Horizontal line from starting parent node, to 10 pixels to the left
   var lineHoriz1 = document.createElementNS(svgNS, 'line');
   lineHoriz1.setAttribute("x1", x-5);
-  lineHoriz1.setAttribute("y1", y-5);
+  lineHoriz1.setAttribute("y1", y-10);
   lineHoriz1.setAttribute("x2", x-15);
-  lineHoriz1.setAttribute("y2", y-5);
+  lineHoriz1.setAttribute("y2", y-10);
   lineHoriz1.setAttribute("style", "stroke:rgb(0,0,0);stroke-width:2");
   svg.appendChild(lineHoriz1);
 
