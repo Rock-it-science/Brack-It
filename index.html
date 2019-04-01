@@ -128,9 +128,9 @@ function createBracket(cNode, numRounds, names, cdepth){
   }
   else{//Not at leaf nodes yet (names are just placeholders)
     if(cNode.child1 == null && cNode.child2 == null){
-      cNode.child1 = new Node('a');
+      cNode.child1 = new Node('?');
       cNode.child1.parent = cNode;
-      cNode.child2 = new Node('b');
+      cNode.child2 = new Node('?');
       cNode.child2.parent = cNode;
       cdepth++;
       createBracket(cNode.child1, numRounds, names, cdepth);
@@ -171,6 +171,7 @@ function drawNode(cNode, layer, x, y){
   var textElement = document.createElementNS(svgNS, 'text');
   textElement.setAttribute("x", x);
   textElement.setAttribute("y", y);
+  textElement.setAttribute("onclick", "winner("+cNode+")");//TODO Fix so I'm not passing an object, use an event handler?
   svg.appendChild(textElement);
   textElement.innerHTML = cNode.name;
 
@@ -233,6 +234,12 @@ function drawLines(layer, x, y){
   layer++;
   drawLines(layer, x-100, newy1);
   drawLines(layer, x-100, newy2);
+}
+
+function winner(node){
+  //Set node's parent's name to node's name
+  //node.parent.name = node.name;
+  console.log('winner: '+node.name);
 }
 
 </script>
