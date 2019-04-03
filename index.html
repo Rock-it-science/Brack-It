@@ -4,7 +4,7 @@
 <h1>Brack-it!</h1>
 </header>
 <body>
-<form onsubmit="return false">
+<form id='numItemForm' onsubmit="return false">
   <h3>Number of players: (currently works with 2, 4, or 8)</h3><br>
   <input type="text" name="numItems" id="numItems">
   <input type="Submit" value="submit" onclick="nameForm(getElementById('numItems').value)">
@@ -27,12 +27,7 @@ function nameForm(numItems){
     textElement.id = 'player'+i;
     formElement.appendChild(textElement);
   }
-  /*//Add submit button
-  var submitButton = document.createElement('input');
-  submitButton.type = 'Submit';
-  submitButton.value = 'submit';
-  submitButton.onclick = 'getNames('+numItems+')';
-  formElement.appendChild(submitButton);*/
+
   //Make form visible
   formElement.style.display = 'block';
 }
@@ -47,6 +42,10 @@ function getNames(numItems){
 }
 
 function brackIt(numItems, names){
+  //Hide forms
+  document.getElementById('numItemForm').style.display = 'none';
+  document.getElementById('playerForm').style.display = 'none';
+
   numItems = parseInt(numItems);
   console.log('numItems: '+numItems);
   //complain if numItems is not a number
