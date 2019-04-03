@@ -86,18 +86,20 @@ function brackIt(numItems, names){
   drawBracket(bracket._root);
 }
 
-function Node(name){
+function Node(name, id){
   this.name = name;
+  this.id = id;
   this.parent = null;
   this.child1 = null;
   this.child2 = null;
 }
 
 function Bracket(){
-  var node = new Node('root');
+  var node = new Node(' ', 0);
   this._root = node;
 }
 var namesIndex = 0;
+var idCounter = 1;
 function createBracket(cNode, numRounds, names, cdepth){
   /*Creating tree-like bracket
   - End up with bracket-tree with number of leaves = numItems
@@ -113,26 +115,32 @@ function createBracket(cNode, numRounds, names, cdepth){
   else if(cdepth == numRounds){
     //If current node has empty child spot, fill it, iterate cdepth, run again on same node
     if(cNode.child1 == null && cNode.child2 == null){
-      cNode.child1 = new Node(names[namesIndex]);
+      cNode.child1 = new Node(names[namesIndex], idCounter);
       cNode.child1.parent = cNode;
-      console.log('added leaf node '+names[namesIndex]);
+      console.log('added leaf node '+cNode.child1.name+' id: '+cNode.child1.id);
       namesIndex++;
-      cNode.child2 = new Node(names[namesIndex]);
+      idCounter++;
+      cNode.child2 = new Node(names[namesIndex], idCounter);
       cNode.child2.parent = cNode;
-      console.log('added leaf node '+names[namesIndex]);
+      console.log('added leaf node '+cNode.child2.name+' id: '+cNode.child2.id);
       namesIndex++;
       cdepth++;
+      idCounter++;
       createBracket(cNode.child1, numRounds, names, cdepth);
       createBracket(cNode.child2, numRounds, names, cdepth);
     }
   }
   else{//Not at leaf nodes yet (names are just placeholders)
     if(cNode.child1 == null && cNode.child2 == null){
-      cNode.child1 = new Node('?');
+      cNode.child1 = new Node(' ', idCounter);
       cNode.child1.parent = cNode;
-      cNode.child2 = new Node('?');
+      console.log('non-leaf node id='+cNode.child1.id);
+      idCounter++;
+      cNode.child2 = new Node(' ', idCounter);
       cNode.child2.parent = cNode;
+      console.log('non-leaf node id='+cNode.child2.id);
       cdepth++;
+      idCounter++;
       createBracket(cNode.child1, numRounds, names, cdepth);
       createBracket(cNode.child2, numRounds, names, cdepth);
     }
@@ -169,10 +177,16 @@ function drawNode(cNode, layer, x, y){
 
   //Initialize text element
   var textElement = document.createElementNS(svgNS, 'text');
+  textElement.setAttribute("id", cNode.id);
   textElement.setAttribute("x", x);
   textElement.setAttribute("y", y);
-  textElement.setAttribute("onclick", "winner("+cNode+")");//TODO Fix so I'm not passing an object, use an event handler?
   svg.appendChild(textElement);
+  textElement.addEventListener("click", function(){
+    //When user clicks textElement, change parent's name to nNode.name
+    cNode.parent.name = cNode.name;
+    var parentElement = document.getElementById(cNode.parent.id);
+    parentElement.innerHTML = cNode.name;
+  });
   textElement.innerHTML = cNode.name;
 
   //Call recursively
@@ -234,12 +248,6 @@ function drawLines(layer, x, y){
   layer++;
   drawLines(layer, x-100, newy1);
   drawLines(layer, x-100, newy2);
-}
-
-function winner(node){
-  //Set node's parent's name to node's name
-  //node.parent.name = node.name;
-  console.log('winner: '+node.name);
 }
 
 </script>
