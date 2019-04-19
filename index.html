@@ -20,6 +20,10 @@
 <div id='bracketSpace'></div>
 
 <script>
+
+//Some global variables
+var leafNodes = [];
+
 function nameForm(numItems){
   //Get form element
   var formElement = document.getElementById('playerForm');
@@ -90,6 +94,7 @@ function brackIt(numItems, names){
 
   //Call functions for creating the bracket and printing it
   createBracket(bracket._root, numRounds, names, 1);
+  addRemainder(leafNodes, remainder, names);
   drawBracket(bracket._root);
 }
 
@@ -115,6 +120,9 @@ function createBracket(cNode, numRounds, names, cdepth){
 
   //Check if current depth exceeds numRounds (base case)
   if(cdepth > numRounds){
+
+
+    //All nodes should now exist
     return;
   }
 
@@ -124,11 +132,13 @@ function createBracket(cNode, numRounds, names, cdepth){
     if(cNode.child1 == null && cNode.child2 == null){
       cNode.child1 = new Node(names[namesIndex], idCounter);
       cNode.child1.parent = cNode;
+      leafNodes.push(cNode.child1);
       console.log('added leaf node '+cNode.child1.name+' id: '+cNode.child1.id);
       namesIndex++;
       idCounter++;
       cNode.child2 = new Node(names[namesIndex], idCounter);
       cNode.child2.parent = cNode;
+      leafNodes.push(cNode.child2);
       console.log('added leaf node '+cNode.child2.name+' id: '+cNode.child2.id);
       namesIndex++;
       cdepth++;
@@ -151,6 +161,45 @@ function createBracket(cNode, numRounds, names, cdepth){
       createBracket(cNode.child1, numRounds, names, cdepth);
       createBracket(cNode.child2, numRounds, names, cdepth);
     }
+  }
+}
+
+function addRemainder(leafNodes, remainder, names){
+  //First create a node that will be the parent of the first remainder node
+  //  Attach to last leaf node and work backwards (no chance of running out of leaf nodes since remainder is always less than number of items in first round)
+  pNode = leafNodes[0];
+  var rem = remainder; //Dynamic remainder variable
+
+  //while remainder is >0, add extra nodes
+  while(rem > 0){
+    rCounter = remainder - rem;
+
+    //For first child, move parent down so its still a leaf node
+    var parent = pNode.parent;
+    //Create placeholder node to be parent of pNode
+    var placeholder = new Node(" ", -1);
+    //Find whether pNode is the first or second child of its parent and set child of parent to be placeholder
+    if(parent.child1 == pNode){
+      parent.child1 = placeholder;
+    }else{
+      parent.child2 = placeholder;
+    }
+    //Set child of placeholder
+    placeholder.child1 = pNode;
+    //Set parent of pNode
+    pNode.parent = placeholder;
+
+    //Second child will be a remainder node
+    placeholder.child2 = new Node(names[names.length - rCounter-1], idCounter + rCounter);
+    placeholder.child2.parent = placeholder;
+    console.log("added remainder node "+placeholder.child2.name+" id: "+placeholder.child2.id);
+
+    //Decrement rem
+    rem--;
+
+    //Iterate pNode
+    pNode = leafNodes[rCounter-1]
+
   }
 }
 
