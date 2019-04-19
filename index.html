@@ -80,6 +80,10 @@ function brackIt(numItems, names){
   console.log('numRounds: '+numRounds);
   window.numRounds = numRounds;
 
+  //Find remainder after taking numItems mod numRounds
+  var remainder = numItems % numRounds;
+  console.log("remainder: " + remainder);
+
   //Initialize bracket
   var bracket = new Bracket();
   console.log(bracket._root);
@@ -185,10 +189,13 @@ function drawNode(cNode, layer, x, y){
   textElement.setAttribute("y", y);
   svg.appendChild(textElement);
   textElement.addEventListener("click", function(){
-    //When user clicks textElement, change parent's name to nNode.name
-    cNode.parent.name = cNode.name;
-    var parentElement = document.getElementById(cNode.parent.id);
-    parentElement.innerHTML = cNode.name;
+    //Check if node has a parent
+    if(cNode.parent != null){
+      //When user clicks textElement, change parent's name to nNode.name
+      cNode.parent.name = cNode.name;
+      var parentElement = document.getElementById(cNode.parent.id);
+      parentElement.innerHTML = cNode.name;
+    }
   });
   textElement.innerHTML = cNode.name;
 
